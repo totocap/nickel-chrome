@@ -14,8 +14,7 @@
     "build": "babel src -d lib",
     "test": "mocha --recursive test --slow 600",
     "lint": "eslint src",
-    "prettier": "prettier --write \"src/**/*.js\"",
-    "install": "npm run build"
+    "prettier": "prettier --write \"src/**/*.js\""
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
