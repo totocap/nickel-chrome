@@ -29,11 +29,13 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
       const now = Date.now()
 
       // Get body, or use dummy html if it's an healthcheck
-      let payload = await parseBody(req)
+      let payload = null
       if (['HEAD', 'GET'].includes(req.method) && req.url === '/healthcheck') {
         payload = {
           html: minimalHtml,
         }
+      } else {
+        payload = await parseBody(req)
       }
 
       // Actually ask chrome workers for the screenshot
