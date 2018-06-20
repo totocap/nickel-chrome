@@ -7,8 +7,8 @@ const createServer = require('./createServer')
 const minimalHtml = "<!doctype html><html lang=en><head><meta charset=utf-8><title>blah</title></head><body><p>I'm the content</p></body></html>"
 
 module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
-  if (config.logguer) {
-    log.setLogguer(config.logguer)
+  if (config.logger) {
+    log.setLogger(config.logguer)
   }
 
   log.log(`

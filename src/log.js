@@ -19,7 +19,9 @@ function genericLog(msg, type) {
 
 exports.setSilent = () => (LEVEL = 'silent')
 
-exports.setLogguer = (logger) => (LOGGER = logger)
+exports.setLogger = function(logger) {
+  LOGGER = logger
+}
 
 exports.log = function log(text) {
   genericLog(text, chalk.blue('[INFO]'))
