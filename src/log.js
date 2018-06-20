@@ -1,7 +1,7 @@
 const debug = require('debug')('nickel-chrome')
 const chalk = require('chalk')
 
-let LOGGUER = null
+let LOGGER = null
 let LEVEL = 'default'
 
 function genericLog(msg, type) {
@@ -9,8 +9,8 @@ function genericLog(msg, type) {
     return
   }
 
-  if (LOGGUER) {
-    LOGGUER(`${chalk.yellow(`[${new Date().toISOString()}]`)} ${type} ${msg}`) // eslint-disable-line no-console
+  if (LOGGER) {
+    LOGGER(`${chalk.yellow(`[${new Date().toISOString()}]`)} ${type} ${msg}`) // eslint-disable-line no-console
   } else {
     debug(`${chalk.yellow(`[${new Date().toISOString()}]`)} ${type} ${msg}`) // eslint-disable-line no-console
   }
@@ -19,7 +19,7 @@ function genericLog(msg, type) {
 
 exports.setSilent = () => (LEVEL = 'silent')
 
-exports.setLogguer = (logguer) => (LOGGUER = logguer)
+exports.setLogguer = (logger) => (LOGGER = logger)
 
 exports.log = function log(text) {
   genericLog(text, chalk.blue('[INFO]'))
