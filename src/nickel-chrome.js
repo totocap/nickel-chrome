@@ -11,21 +11,13 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
     log.setLogger(config.logguer)
   }
 
-  log.log(`
-     ╔═════════════════════╗
-     ║                   ║
-     ║   NICKEL-CHROME   ║
-     ║                   ║
-     ╟─────────────────────╢
-     ║ ${version}             ║
-     ╚═════════════════════╝
-  `)
+  log.log(`Starting...`)
 
   scheduler.launchWorkers(nbWorkers)
 
   createServer(port, async (req, res) => {
+    const requestID = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
     try {
-      log.log('Receiving request')
       const now = Date.now()
 
       // Get body, or use dummy html if it's an healthcheck
@@ -35,18 +27,21 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
           html: minimalHtml,
         }
       } else {
+        log.log('Receiving request', { requestID })
         payload = await parseBody(req)
+        log.log('Parsed request', { requestID, payload })
       }
 
       // Actually ask chrome workers for the screenshot
       const base64 = await scheduler.screenshot(payload)
-      log.log(`Screenshot done in ${Date.now() - now}ms`)
+      log.log('Generated screenshot', { requestID, base64, duration: Date.now() - now })
 
       // Send response to client
       res.writeHead(200)
       res.end(base64)
     } catch (err) {
-      log.error(err)
+      log.error(err.message, { requestID, stack: err.stack })
+
       res.writeHead(500)
       res.end('KO')
     }
@@ -54,6 +49,7 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
 }
 
 async function onExit() {
+  log.error('Whole process exiting')
   await scheduler.stopWorkers()
   process.exit()
 }
