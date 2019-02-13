@@ -8,7 +8,7 @@ const minimalHtml = "<!doctype html><html lang=en><head><meta charset=utf-8><tit
 
 module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
   if (config.logger) {
-    log.setLogger(config.logguer)
+    log.setLogger(config.logger)
   }
 
   log.log(`Starting...`)
