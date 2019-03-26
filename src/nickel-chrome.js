@@ -1,4 +1,3 @@
-const { version } = require('../package.json')
 const scheduler = require('./scheduler')
 const parseBody = require('./parseBody')
 const log = require('./log')
@@ -24,6 +23,7 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
       // Get body, or use dummy html if it's an healthcheck
       let payload = null
       if (['HEAD', 'GET'].includes(req.method) && req.url === '/healthcheck') {
+        log.log('Healthcheck', { requestID })
         payload = {
           html: minimalHtml,
         }

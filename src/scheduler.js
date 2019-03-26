@@ -17,6 +17,7 @@ function wait(ms = 200) {
 
 async function getAvailableWorker(maxRetry = 10) {
   if (!maxRetry) {
+    log.log(`Number of workers: ${workers.filter(w => w.isAvailable).length} available / ${workers.length} in total`)
     throw new Error('No available browsers.')
   }
   const browser = workers.find(w => w.isAvailable)
@@ -36,6 +37,7 @@ exports.launchWorkers = async function(nb = 5) {
 
 exports.stopWorkers = async function() {
   if (!workers.length) {
+    log.log('No worker to stop')
     return
   }
   for (let i = 0; i < workers.length; i++) {

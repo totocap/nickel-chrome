@@ -1,5 +1,3 @@
-const debug = require('debug')('nickel-chrome')
-
 let LOGGER = null
 let LEVEL = 'default'
 
