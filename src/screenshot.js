@@ -61,7 +61,7 @@ module.exports = async function screenshot(browser, options) {
   if (!isWatchdog) log.log('Wait for page to load', { requestID })
   await waitLoad(page, loadTimeout)
 
-  if (!isWatchdog) log.log('Clip the page', { requestID, selector })
+  if (!isWatchdog) log.log('Clip the page', { requestID, selector: `My selector:${selector}` })
   const clip = selector ? await getClip(page, selector) : null
 
   if (!isWatchdog) log.log('Inject styles', { requestID })
