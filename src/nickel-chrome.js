@@ -34,7 +34,7 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
       }
 
       // Actually ask chrome workers for the screenshot
-      const base64 = await scheduler.screenshot(payload)
+      const base64 = await scheduler.screenshot({ ...payload, isWatchdog, requestID})
 
       if (!isWatchdog) {
         log.log('Generated screenshot', { requestID, screenshotLength: base64.length, duration: Date.now() - now })

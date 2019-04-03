@@ -1,4 +1,5 @@
 const sharp = require('sharp')
+const log = require('./log')
 
 function assignStyle(e, styles) {
   for (const i in styles) {
@@ -38,9 +39,11 @@ function waitLoad(page, loadTimeout) {
 module.exports = async function screenshot(browser, options) {
   const {
     html = '',
+    isWatchdog,
     viewportSize = {},
     selector,
     styles,
+    requestID,
     resize,
     // can be ['jpg', 'png']
     format,
@@ -52,20 +55,27 @@ module.exports = async function screenshot(browser, options) {
 
   const page = await browser.newPage()
   await page.setViewport({ width: pageWidth, height: pageHeight })
+
+  if (!isWatchdog) log.log('Page content', { html, requestID })
   await page.setContent(html)
+  if (!isWatchdog) log.log('Wait for page to load', { requestID })
   await waitLoad(page, loadTimeout)
 
+  if (!isWatchdog) log.log('Clip the page', { requestID, selector })
   const clip = selector ? await getClip(page, selector) : null
 
+  if (!isWatchdog) log.log('Inject styles', { requestID })
   // eventually inject custom styles
   await injectStyles(page, styles)
 
+  if (!isWatchdog) log.log('Get screenshot', { requestID })
   let buffer = await page.screenshot({
     fullPage: fullPage && !clip,
     ...(clip ? { clip } : {}),
   })
   await page.close()
 
+  if (!isWatchdog) log.log('Sharp operations', { requestID })
   // sharp operations
   const shouldSharp = !!resize || !!format
   if (shouldSharp) {
