@@ -23,7 +23,6 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
       // Get body, or use dummy html if it's an healthcheck
       let payload = null
       if (['HEAD', 'GET'].includes(req.method) && req.url === '/healthcheck') {
-        log.log('Healthcheck', { requestID })
         payload = {
           html: minimalHtml,
         }
@@ -45,7 +44,7 @@ module.exports = nickelChrome = ({port, nbWorkers, ...config}) => {
       res.writeHead(200)
       res.end(base64)
     } catch (err) {
-      log.error(err.message, { requestID, stack: err.stack })
+      log.error(err.message, { isWatchdog, requestID, stack: err.stack })
 
       res.writeHead(500)
       res.end('KO')
