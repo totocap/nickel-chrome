@@ -54,6 +54,7 @@ module.exports = async function screenshot(browser, options) {
   const { width: pageWidth = 650, height: pageHeight = 650, fullPage = false } = viewportSize
 
   const page = await browser.newPage()
+  await page.setJavaScriptEnabled(false)
   await page.setViewport({ width: pageWidth, height: pageHeight })
 
   if (!isWatchdog) log.log('Page content', { html, requestID })
