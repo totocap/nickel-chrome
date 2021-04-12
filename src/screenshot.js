@@ -55,6 +55,7 @@ module.exports = async function screenshot(browser, options) {
 
   const page = await browser.newPage()
   await page.setJavaScriptEnabled(false)
+  log.log(`IS JS THERE ? ${page.isJavaScriptEnabled()}`)
   await page.setViewport({ width: pageWidth, height: pageHeight })
 
   if (!isWatchdog) log.log('Page content', { html, requestID })
